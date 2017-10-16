@@ -1,17 +1,22 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
-    <hello-world/>
+    <v-header></v-header>
+    <div class="tab">
+      <router-link to="/seller">商家</router-link>
+      <router-link to="/goods">商品</router-link>
+      <router-link to="/ratings">评论</router-link>
+    </div>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld'
+import vHeader from './components/header/header'
 
 export default {
   name: 'app',
   components: {
-    HelloWorld
+    vHeader
   }
 }
 </script>
