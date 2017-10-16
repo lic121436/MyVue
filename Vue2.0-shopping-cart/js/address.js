@@ -42,6 +42,7 @@ new Vue({
                     });
                 }
             },
+            // 展开收起
             loadMore() {
                 if (this.more == '展开') {
                     this.limitNum = this.addressList.length;
@@ -52,6 +53,7 @@ new Vue({
                 }
 
             },
+            // 设置默认地址
             setDefault(addressId) {
                 this.addressList.forEach(function (address, index) {
                     if (address.addressId == addressId) {
@@ -81,10 +83,9 @@ new Vue({
                 }else{
                    this.addressId = 1; 
                 }
-                
-                
+                console.log(item);
                 this.curAddress = item;
-                if (this.curAddress === undefined) {
+                if (this.curAddress === 0) {
                      this.addressId =  this.addressId + 1;
                      this.postCode = '';
                     this.isDefault = false;
