@@ -83,7 +83,6 @@ new Vue({
                 }else{
                    this.addressId = 1; 
                 }
-                console.log(item);
                 this.curAddress = item;
                 if (this.curAddress === 0) {
                      this.addressId =  this.addressId + 1;
