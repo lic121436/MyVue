@@ -2,6 +2,8 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import axios from 'axios'
+import VueAxios from 'vue-axios'
 import App from './App'
 import Seller from './components/seller/seller'
 import Goods from './components/goods/goods'
@@ -9,16 +11,15 @@ import Ratings from './components/ratings/ratings'
 
 import './comnon/css/index.scss'
 
-
-
 Vue.use(VueRouter)
+Vue.use(VueAxios, axios)
 Vue.config.productionTip = false
 
 // 2. 定义路由
 // 每个路由应该映射一个组件。 其中"component" 可以是
 // 通过 Vue.extend() 创建的组件构造器，
 const routes = [
-  {path: '/', redirect: 'goods'},  // 设置默认路由
+  { path: '/', redirect: 'goods' },  // 设置默认路由
   { path: '/seller', component: Seller },
   { path: '/goods', component: Goods },
   { path: '/ratings', component: Ratings }
