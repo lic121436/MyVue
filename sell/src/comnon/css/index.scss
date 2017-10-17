@@ -1,0 +1,7 @@
+@import './mixin';
+@import './icon.css';
+@import './base'; 
+.border-1px{
+    @include border-1px(rgba(7, 17, 27, .1));
+}
+ 
