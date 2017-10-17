@@ -7,6 +7,9 @@ import Seller from './components/seller/seller'
 import Goods from './components/goods/goods'
 import Ratings from './components/ratings/ratings'
 
+import './comnon/css/index.scss'
+
+
 
 Vue.use(VueRouter)
 Vue.config.productionTip = false
@@ -25,7 +28,8 @@ const routes = [
 // 3. 创建 router 实例，然后传 `routes` 配置
 // 你还可以传别的配置参数, 不过先这么简单着吧。
 const router = new VueRouter({
-  routes // （缩写）相当于 routes: routes
+  routes, // （缩写）相当于 routes: routes
+  linkActiveClass: 'active' // 将 router-link-active 用active来代替
 })
 
 // 4. 创建和挂载根实例。
