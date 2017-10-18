@@ -22,8 +22,18 @@
           <span class="text">{{seller.supports[0].description}}</span>
         </div>
       </div>
+      <div v-if="seller.supports" class="support-count">
+        <span class="count">{{seller.supports.length}}个</span>
+        <i class="icon-keyboard_arrow_right"></i>
+      </div>
     </div>
-    <div class="bullentin-wrapper"></div>
+    <!-- 公告栏 -->
+    <div class="bulletin-wrapper">
+      <span class="bulletin-title"></span><span class="bulletin-text">{{seller.bulletin}}</span>
+      <i class="icon-keyboard_arrow_right"></i>
+    </div>
+    <!-- 背景图片 -->
+    <div class="background"><img :src="seller.avatar" width="100%" height="100%" alt=""></div>
   </div>
 </template>
 <script>
@@ -43,9 +53,11 @@ export default {
   @import "../../comnon/css/mixin.scss";
 
   .header{
+    position: relative;
     color:#fff;
-    background: #000;
+    background-color: rgba(7,17,27,.5);
     .content-wrapper{
+      position: relative;
       padding: 24px 12px 18px 24px;
       font-size: 0;
       .avatar{
@@ -107,11 +119,75 @@ export default {
             }
           }
           .text{
+            margin-left: 4px;
             line-height: 12px;
-            font-size: 12px;
+            font-size: 10px;
           }
         }
       }
+      .support-count{
+        position: absolute;
+        right: 12px;
+        bottom:18px;
+        padding: 0 8px;
+        height: 24px;
+        line-height: 24px;
+        text-align:center;
+        border-radius: 14px;
+        background-color: rgba(0,0,0,.2);
+        .count{
+          font-size: 10px;
+          vertical-align: top;
+        }
+        .icon-keyboard_arrow_right{
+          margin-left: 2px;
+          line-height: 24px;
+          font-size: 10px;
+        }
+      }
+    }
+    .bulletin-wrapper{
+      position: relative;
+      height: 28px;
+      padding: 0 22px 0 12px;
+      line-height: 28px;
+      font-size: 0;
+      background-color: rgba(7,17,27,.2);
+      .bulletin-title{
+        display: inline-block;
+        width: 22px;
+        height: 12px;
+        margin-top: 7px;
+        @include bg-image('bulletin');
+        background-size: 22px 12px;
+        background-repeat: no-repeat;
+        vertical-align: top;
+      }
+      .bulletin-text{
+        display: inline-block;
+        width: calc(100% - 30px);
+        margin-left: 4px;
+        font-size: 14px;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        vertical-align: top;
+      }
+      .icon-keyboard_arrow_right{
+        position: absolute;
+        top:8px;
+        right: 12px;
+        font-size: 10px;
+      }
+    }
+    .background{
+      z-index: -1;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      filter: blur(10px);
     }
   }
 </style>
