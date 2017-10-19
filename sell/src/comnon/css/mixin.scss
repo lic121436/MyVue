@@ -10,6 +10,11 @@
         border-bottom: 1px solid $color;
     } 
 }
+@mixin border-none(){
+    &:after{
+        display: none;
+    }
+}
 
 @mixin bg-image($url){
     background-image: url($url+"@2x.png");
