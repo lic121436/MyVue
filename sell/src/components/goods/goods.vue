@@ -42,13 +42,17 @@
                   <!-- 原价 -->
                   <span class="old" v-show="food.oldPrice">¥{{food.oldPrice}}</span>
                 </div>
+                <!-- 引入cartcontrol控件 -->
+                <div class="cartcontrol-wrapper">
+                  <cartcontrol :food="food"></cartcontrol>
+                </div>
               </div>
             </li>
           </ul>
         </li>
       </ul>
     </div>
-    <shopcart :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice"></shopcart>
+    <shopcart ref="shopcart" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice" :select-foods="selectFoods"></shopcart>
   </div>
 </template>
 <script>
@@ -81,6 +85,18 @@ export default {
         }
       }
       return 0;
+    },
+    // cartcontrol组件改变food数量
+    selectFoods(){
+      let foods = [];
+      this.goods.forEach((good) => {
+        good.foods.forEach((food) => {
+          if(food.count){
+            foods.push(food);
+          }
+        });
+      });
+      return foods;
     }
   },
   created() {
@@ -101,12 +117,16 @@ export default {
     this.classMap = ["decrease", "discount", "special", "invoice", "guarantee"];
   },
   methods: {
+    _drop(target){
+      this.$refs.shopcart.drop(target);
+    },
     // 初始化滚动
     _initScroll() {
       this.meunScroll = new BScroll(this.$refs.menuWrapper, {
         click: true
       });
       this.foodsScroll = new BScroll(this.$refs.foodWrapper, {
+        click: true,
         probeType: 3
       });
       this.foodsScroll.on('scroll', (pos) => {
@@ -137,8 +157,14 @@ export default {
     }
   },
   components: {
-    shopcart
-  }
+    shopcart,
+    cartcontrol
+  },
+  // events:{
+  //   'cart.add'(target){
+  //     this._drop(target);
+  //   }
+  // }
 };
 </script>
 
@@ -267,6 +293,11 @@ export default {
             font-size: 10px;
             color: rgb(147, 153, 159);
           }
+        }
+        .cartcontrol-wrapper{
+          position: absolute;
+          right: 0;
+          bottom:12px;
         }
       }
     }
