@@ -17,33 +17,33 @@
 </template>
 
 <script>
-import vHeader from './components/header/header'
+import vHeader from "./components/header/header";
 
 const ERR_OK = 0;
 export default {
-  name: 'app',
+  name: "app",
   data() {
     return {
       seller: {}
-    }
+    };
   },
   created() {
-    this.axios.get('/api/seller').then((res) => {
+    this.axios.get("/api/seller").then(res => {
       var res = res.data;
       if (res.errno === ERR_OK) {
         this.seller = res.data;
       }
-    })
+    });
   },
   components: {
     vHeader
   }
-}
+};
 </script>
 
 <style lang="scss">
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   .tab {
@@ -55,7 +55,7 @@ export default {
     .tab-item {
       flex: 1;
       text-align: center;
-      &>a {
+      & > a {
         display: block;
         font-size: 14px;
         color: rgb(77, 85, 93);
