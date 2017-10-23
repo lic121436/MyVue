@@ -1,4 +1,5 @@
 <template>
+
   <div class="shopcart">
       <div class="content" @click="toggleList">
           <!-- 购物车右侧 -->
@@ -16,7 +17,7 @@
               <div class="desc">另需配送费¥{{deliveryPrice}}元</div>
           </div>
           <!-- 购物车右侧 -->
-          <div class="content-right">
+          <div class="content-right" @click.stop.prevent="pay">
               <div class="pay" :class="payClass">{{payDesc}}</div>
             </div>
       </div>
@@ -31,10 +32,10 @@
             <!-- 列表头部 -->
             <div class="list-header">
                 <h1 class="title">购物车</h1>
-                <div class="empty">清空</div>
+                <div class="empty" @click="empty">清空</div>
             </div>
             <!-- 列表内容 -->
-            <div class="list-content">
+            <div class="list-content" ref="listContent">
                 <ul>
                     <li class="food" v-for="food in selectFoods">
                         <span class="name">{{food.name}}</span>
@@ -49,11 +50,19 @@
             </div>
         </div>
       </transition>
+      <!-- 蒙板 -->
+      <transition name="fade">
+        <div class="list-mask" @click="hideList" v-show="listShow"></div>
+      </transition>
   </div>
+
 </template>
+</div>
 
 <script>
+import BScroll from "better-scroll";
 import cartcontrol from "../../components/cartcontrol/cartcontrol";
+
 export default {
   // 接收传入组件的信息
   props: {
@@ -135,6 +144,17 @@ export default {
         return false;
       }
       let show = !this.fold;
+      if (show) {
+        this.$nextTick(() => {
+          if (!this.scroll) {
+            this.scroll = new BScroll(this.$refs.listContent, {
+              click: true
+            });
+          } else {
+            this.scroll.refresh(); // 调用接口，计算是否可以滚动
+          }
+        });
+      }
       return show;
     }
   },
@@ -147,6 +167,21 @@ export default {
         return;
       }
       this.fold = !this.fold;
+    },
+    empty() {
+      this.selectFoods.forEach(food => {
+        food.count = 0;
+      });
+    },
+    hideList(){
+      this.fold = true;
+    },
+    pay(){
+      
+      if(this.totalPrice < this.minPrice){
+        return;
+      }
+      window.alert(`支付${this.totalPrice}`);
     }
   },
   components: {
@@ -156,8 +191,9 @@ export default {
 </script>
 
 <style lang="scss">
+@import "../../comnon/css/mixin.scss";
 .shopcart {
-  z-index: 2;
+  z-index: 41;
   position: fixed;
   left: 0;
   bottom: 0;
@@ -280,19 +316,15 @@ export default {
 
   .fold-enter-active,
   .fold-leave-active {
-     transition: all 0.3s linear;
- transform: translateY(-100%);
+    
+    transition: all 0.3s linear;
   }
-
 
   .fold-enter,
   .fold-leave-to {
-   
+    transform: translateY(0%);
     opacity: 0;
-
   }
-
- 
 
   .shopcart-list {
     z-index: -1;
@@ -300,6 +332,7 @@ export default {
     top: 0;
     left: 0;
     width: 100%;
+    transform: translateY(-100%);
     .list-header {
       height: 40px;
       padding: 0 18px;
@@ -317,6 +350,55 @@ export default {
         color: rgb(0, 160, 220);
       }
     }
+    .list-content {
+      padding: 0 18px;
+      max-height: 217px;
+      background-color: #fff;
+      overflow: hidden;
+      .food {
+        position: relative;
+        padding: 12px 0;
+        box-sizing: border-box;
+        @include border-1px(rgba(7,17,27,0.1));
+        .name {
+          line-height: 24px;
+          font-size: 14px;
+          color: rgb(7, 17, 27);
+        }
+        .price {
+          position: absolute;
+          right: 90px;
+          bottom: 12px;
+          line-height: 24px;
+          font-size: 14px;
+          font-weight: 700px;
+          color: rgb(240, 20, 20);
+        }
+        .cartcontrol-wrapper {
+          position: absolute;
+          right: 0;
+          bottom: 6px;
+        }
+      }
+    }
+  }
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 0.5s;
+  }
+  .fade-enter,
+  .fade-leave-to {
+    opacity: 0;
+  }
+  .list-mask {
+    z-index: -2;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    -webkit-backdrop-filter: blur(10px);
+    background-color: rgba(7, 17, 27, 0.6);
   }
 }
 </style>
