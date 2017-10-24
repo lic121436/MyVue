@@ -23,6 +23,7 @@ export default {
   methods: {
     //   增加商品
     addCart(event) {
+      event.stopPropagation();    
       if (!event._constructed) {
         return;
       }
@@ -36,6 +37,7 @@ export default {
     },
     // 减少商品
     decreaseCart() {
+      event.stopPropagation();
       if (this.food.count) {
         this.food.count--;
       }
