@@ -28,7 +28,7 @@
       </div> -->
       <!-- 购物车列表 -->
       <transition name="fold">
-        <div class="shopcart-list" v-show="listShow">
+        <div class="shopcart-list" v-show="listShow" ref="shopcartList">
             <!-- 列表头部 -->
             <div class="list-header">
                 <h1 class="title">购物车</h1>
@@ -314,18 +314,41 @@ export default {
     }
   }
 
-  .fold-enter-active,
-  .fold-leave-active {
+  // .fold-enter-active,
+  // .fold-leave-active {
     
-    transition: all 0.3s linear;
-  }
+  //   transition: all 0.3s linear;
+  // }
+  // .fold-enter,
+  // .fold-leave-to {
+  //   transform: translateY(-100%);
+  //   opacity: 0;
+  // }
 
-  .fold-enter,
-  .fold-leave-to {
-    transform: translateY(0%);
-    opacity: 0;
+.fold-enter-active {
+  animation: fold-in .5s linear forwards;
+  -webkit-animation-fill-mode:forwards;
+  animation-fill-mode: forwards;
+}
+.fold-leave-active {
+  animation: fold-out .5s linear forwards;
+}
+@keyframes fold-in {
+  0% {
+    transform: translateY(0);
   }
-
+  100% {
+    transform: translateY(-100%);
+  }
+}
+@keyframes fold-out {
+  0% {
+    transform: translateY(-100%);
+  }
+  100% {
+    transform: translateY(0);
+  }
+}
   .shopcart-list {
     z-index: -1;
     position: absolute;
