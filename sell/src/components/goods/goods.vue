@@ -1,4 +1,5 @@
 <template>
+<div>
   <div class="goods">
     <!-- 左侧菜单 -->
     <div class="menu-wrapper" ref="menuWrapper">
@@ -19,7 +20,7 @@
           <h1 class="title">{{item.name}}</h1>
           <!-- 分类列表 -->
           <ul>
-            <li v-for="food in item.foods" class="food-item border-1px">
+            <li @click="selectFood(food)" v-for="food in item.foods" class="food-item border-1px">
               <!-- 图标 -->
               <div class="icon">
                 <img width="57" height="64" :src="food.icon" alt="">
@@ -52,13 +53,20 @@
         </li>
       </ul>
     </div>
+
     <shopcart ref="shopcart" :delivery-price="seller.deliveryPrice" :min-price="seller.minPrice" :select-foods="selectFoods"></shopcart>
+   
   </div>
+ <food :food="selectedFood"  ref="foodContainer"></food>
+    
+</div>
 </template>
+
 <script>
 import BScroll from "better-scroll";
 import shopcart from "../../components/shopcart/shopcart";
 import cartcontrol from "../../components/cartcontrol/cartcontrol";
+import food from "../../components/food/food";
 
 const ERR_OK = 0;
 export default {
@@ -71,27 +79,28 @@ export default {
     return {
       goods: [],
       listHeiht: [],
-      scrollY: 0
+      scrollY: 0,
+      selectedFood: {}
     };
   },
-  computed:{
+  computed: {
     // 左侧当前索引所在位置
-    currentIndex(){
-      for(let i = 0; i < this.listHeiht.length; i++){
+    currentIndex() {
+      for (let i = 0; i < this.listHeiht.length; i++) {
         let height1 = this.listHeiht[i];
         let height2 = this.listHeiht[i + 1];
-        if(!height2 || (this.scrollY >= height1 && this.scrollY < height2)){
+        if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
           return i;
         }
       }
       return 0;
     },
     // cartcontrol组件改变food数量
-    selectFoods(){
+    selectFoods() {
       let foods = [];
-      this.goods.forEach((good) => {
-        good.foods.forEach((food) => {
-          if(food.count){
+      this.goods.forEach(good => {
+        good.foods.forEach(food => {
+          if (food.count) {
             foods.push(food);
           }
         });
@@ -117,7 +126,7 @@ export default {
     this.classMap = ["decrease", "discount", "special", "invoice", "guarantee"];
   },
   methods: {
-    _drop(target){
+    _drop(target) {
       this.$refs.shopcart.drop(target);
     },
     // 初始化滚动
@@ -129,37 +138,47 @@ export default {
         click: true,
         probeType: 3
       });
-      this.foodsScroll.on('scroll', (pos) => {
-        this.scrollY =Math.abs(Math.round(pos.y));  // pos.y滚动是一个负值
+      this.foodsScroll.on("scroll", pos => {
+        this.scrollY = Math.abs(Math.round(pos.y)); // pos.y滚动是一个负值
       });
     },
     // 计算右侧每个区间的高度
-    _calulateHeight(){
-      let foodList = this.$refs.foodWrapper.getElementsByClassName('food-list-hook');
+    _calulateHeight() {
+      let foodList = this.$refs.foodWrapper.getElementsByClassName(
+        "food-list-hook"
+      );
       let height = 0;
       this.listHeiht.push(height);
-      for(let i = 0; i < foodList.length; i++){
+      for (let i = 0; i < foodList.length; i++) {
         let item = foodList[i];
         height += item.clientHeight;
         this.listHeiht.push(height);
       }
     },
     // 点击选中左侧菜单
-    selectMenu(index, event){
+    selectMenu(index, event) {
       // 新版本的better-scroll已经解决了这个在pc端点击触发两次的bug可以不用写下面的if代码
-      if(!event._constructed){
+      if (!event._constructed) {
         return;
       }
-      let foodList = this.$refs.foodWrapper.getElementsByClassName('food-list-hook');
+      let foodList = this.$refs.foodWrapper.getElementsByClassName(
+        "food-list-hook"
+      );
       let el = foodList[index];
       // 调用better-scroll scrollToElement接口
       this.foodsScroll.scrollToElement(el, 300);
+    },
+    // 点击商品列表项，展示商品详情
+    selectFood(food){
+      this.selectedFood = food;
+      this.$refs.foodContainer.show();
     }
   },
   components: {
     shopcart,
-    cartcontrol
-  },
+    cartcontrol,
+    food
+  }
   // events:{
   //   'cart.add'(target){
   //     this._drop(target);
@@ -188,13 +207,13 @@ export default {
       width: 56px;
       padding: 0 12px;
       line-height: 14px;
-      &.current{
+      &.current {
         z-index: 2;
         position: relative;
-        margin-top:-1px;
+        margin-top: -1px;
         font-weight: 700;
         background-color: #fff;
-        .text{
+        .text {
           @include border-none();
         }
       }
@@ -294,10 +313,10 @@ export default {
             color: rgb(147, 153, 159);
           }
         }
-        .cartcontrol-wrapper{
+        .cartcontrol-wrapper {
           position: absolute;
           right: 0;
-          bottom:12px;
+          bottom: 12px;
         }
       }
     }
