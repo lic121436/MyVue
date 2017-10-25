@@ -2,12 +2,12 @@
     <div class="ratingselect">
         <!-- 评价类型 -->
         <div class="rating-type border-1px">
-            <span class="block positve" :class="{'active': selectType === 2}">{{desc.all}}<span class="count">4</span></span>
-            <span class="block positve" :class="{'active': selectType === 0}">{{desc.positve}}<span class="count">4</span></span>
-            <span class="block negative" :class="{'active': selectType === 1}">{{desc.negative}}<span class="count">4</span></span>
+            <span @click="select(2)" class="block positve" :class="{'active': sType === 2}">{{desc.all}}<span class="count">{{ratings.length}}</span></span>
+            <span @click="select(0)" class="block positve" :class="{'active': sType === 0}">{{desc.positve}}<span class="count">{{positves.length}}</span></span>
+            <span @click="select(1)" class="block negative" :class="{'active': sType === 1}">{{desc.negative}}<span class="count">{{negatives.length}}</span></span>
         </div>
         <!--  -->
-        <div class="switch" :class="{'on': onlyContent}">
+        <div @click="toggleContent" class="switch" :class="{'on': oContent}">
             <i class="icon-check_circle"></i>
             <span class="text">只看有内容的评价</span>
         </div>
@@ -39,10 +39,38 @@ export default {
       default() {
         return {
           all: "全部",
-          positive: "满意",
+          positve: "满意",
           negative: "不满意"
         };
       }
+    }
+  },
+  data () {
+    return {
+      sType: this.selectType,
+      oContent: this.onlyContent  
+    }
+  },
+  computed: {
+    positves(){
+      return this.ratings.filter((rating) => {
+        return rating.rateType === POSITVE;
+      });
+    },
+    negatives(){
+      return this.ratings.filter((rating) => {
+        return rating.rateType === NEGATIVE;
+      });
+    }
+  },
+  methods: {
+    select(type){
+      this.sType = type;
+      this.$emit('select-type', type);
+    },
+    toggleContent(){
+      this.oContent = !this.oContent;
+      this.$emit('toogle-content', this.oContent);
     }
   }
 };
