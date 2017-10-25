@@ -39,6 +39,6 @@ const router = new VueRouter({
 const app = new Vue({
   router,
   template: '<App/>',
-  components: { App }
+  components: { App },
 }).$mount('#app')
 
