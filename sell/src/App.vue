@@ -12,26 +12,36 @@
         <router-link to="/seller">商家</router-link>
       </div>
     </div>
-    <router-view :seller="seller"></router-view>
+    <keep-alive>
+      <router-view :seller="seller"></router-view>
+    </keep-alive>
   </div>
 </template>
 
 <script>
 import vHeader from "./components/header/header";
+import { urlParse } from "./comnon/js/util";
 
 const ERR_OK = 0;
 export default {
   name: "app",
   data() {
     return {
-      seller: {}
+      seller: {
+          id: (() => {
+            let queryParam = urlParse();
+            return queryParam.id;
+          })()
+        }
     };
   },
   created() {
-    this.axios.get("/api/seller").then(res => {
+    
+    this.axios.get("/api/seller?id=" + this.seller.id).then(res => {
       var res = res.data;
       if (res.errno === ERR_OK) {
-        this.seller = res.data;
+        // this.seller = res.data;
+        this.seller = Object.assign({}, this.seller, res.data);
       }
     });
   },
