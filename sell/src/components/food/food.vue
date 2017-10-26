@@ -84,7 +84,7 @@ export default {
     return {
       showFlag: false,
       selectType: ALL,
-      onlyContent: false,
+      onlyContent: true,
       desc: {
         all: "全部",
         positve: "推荐",
@@ -96,7 +96,7 @@ export default {
     show() {
       this.showFlag = true;
       this.selectType = ALL;
-      this.onlyContent = false;
+      this.onlyContent = true;
       this.$nextTick(() => {
         this._scroll();
       });
@@ -124,8 +124,8 @@ export default {
         this.scroll.refresh();
       });
     },
-    OnlyContent(con) {
-      this.onlyContent = con;
+    OnlyContent() {
+      this.onlyContent = !this.onlyContent;
       this.$nextTick(() => {
         this.scroll.refresh();
       });
